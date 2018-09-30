@@ -4,46 +4,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>07_Markers_Infowindows Quiz</title>
+  <script type="text/javascript" src="js/lesson07.js"></script>
   <style type="text/css">
     html, body { height: 100%; margin: 0; padding: 0; }
     #map { height: 100%; }
   </style>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
  </head>
  <body>
    <div id="map"></div>
    <script type="text/javascript">
-     // Create a map variable
-     let map;
-     // Function to initialize the map within the map div
-     function initMap() {
-       map = new google.maps.Map(document.getElementById('map'), {
-         center: {lat: 47.447422, lng: -122.460572},
-         zoom: 14,
-         mapTypeControl: false,
-         styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#444444"}]},{"featureType":"administrative.locality","elementType":"labels.text.fill","stylers":[{"visibility":"simplified"}]},{"featureType":"administrative.land_parcel","elementType":"geometry.fill","stylers":[{"color":"#a6ce39"}]},{"featureType":"administrative.land_parcel","elementType":"labels.text.fill","stylers":[{"visibility":"simplified"},{"color":"#73a533"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape.natural.landcover","elementType":"geometry.fill","stylers":[{"color":"#73a533"}]},{"featureType":"landscape.natural.landcover","elementType":"labels.text.fill","stylers":[{"color":"#a6ce39"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"labels.text.fill","stylers":[{"color":"#73a533"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#46bcec"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#009fc3"}]},{"featureType":"water","elementType":"labels.text.fill","stylers":[{"color":"#009fc3"}]}]
-       });
-       // Create a single latLng literal object.
-       let singleLatLng = {lat: 47.447422, lng: -122.460572};
-       // TODO: Create a single marker appearing on initialize -
-       // Create it with the position of the singleLatLng,
-       // on the map, and give it your own title!
-       let townMarker = new google.maps.Marker({
-         map,
-         position: singleLatLng,
-         title: 'Vashon town',
-         animation: google.maps.Animation.DROP
-       });
-       // create a single infowindow appears on the marker
-       let townContent = '<div>This is the <strong>4 way stop</strong> intersection.</div>';
 
-       let townInfoWindow = new google.maps.InfoWindow({
-         content: townContent
-       });
-       // the infowindow opens when the marker is clicked!
-       townMarker.addListener('click', function(){
-         townInfoWindow.open(map, townMarker);
-       });
-     }
    </script>
    <!--TODO: Insert your API Key in the below call to load the API.-->
    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAchsuMDTCWfSYpOswgOKw3YfO8GW9Yprw&v=3&callback=initMap"></script>   </script>
