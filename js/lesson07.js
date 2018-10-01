@@ -287,17 +287,20 @@ function initMap() {
     ]
     });
     // Fuji Markers for historic remains
-    let remainsMarker = makeMarkerIcon('C08FB3', '<i class="fas fa-landmark"></i>');
+    let remainsMarker = makeMarker('C08FB3', '<i class="fas fa-landmark"></i>');
     // Matcha Markers for nature sights
-    let natureMarker = makeMarkerIcon('328131', '<i class="fab fa-pagelines"></i>'); 
+    let natureMarker = makeMarker('328131', '<i class="fab fa-pagelines"></i>'); 
     // Ukon Markers for craft workshops
-    let craftMarker = makeMarkerIcon('FED300', '<i class="fas fa-paint-brush"></i>');
+    let craftMarker = makeMarker('FED300', '<i class="fas fa-paint-brush"></i>');
     // Blue Markers for modern culture related places
-    let cultureMarker = makeMarkerIcon('0086AD', '<i class="far fa-grin-stars"></i>');
+    let cultureMarker = makeMarker('0086AD', '<i class="far fa-grin-stars"></i>');
     // Orange Markers for food related locations
-    let foodMarker = makeMarkerIcon('EE7800', '<i class="fas fa-utensils"></i>');
+    let foodMarker = makeMarker('EE7800', '<i class="fas fa-utensils"></i>');
 
-    function makeMarkerIcon(markerColor) {
+    // Highlighted markers
+    let highlightedMarker = makeMarker('94A8B0', '<i class="fas fa-exclamation"></i>'));
+
+    function makeMarker(markerColor) {
         let markerImage = new google.maps.MarkerImage(
 
         )
