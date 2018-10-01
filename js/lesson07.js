@@ -1,25 +1,6 @@
-let map;
-let title = locations[i].title;
-let content = locations[i].content;
+let map, remains, nature, workshops, culture, food;
+let markers = [];
 
-// Location genre
-    // Historic remains
-    let remains;
-    // Nature
-    let nature; 
-    // Craft etc workshops
-    let workshops;
-    // Modern culture related places
-    let culture;
-    // Food related locations
-    let food;
-
-// Recommended locations
-let locations = [
-    {title: 'edo-wonderland', content: '<div><a href="http://mukaifarmandgarden.org/" target="_blank">Website</a></div>', position: {lat: 36.791590, lng: 139.697503}, label: culture},
-    {title: 'Kumamoto castle', content: '<div><a href="https://www.japan-guide.com/e/e4501.html" target="_blank">japan-guide.com</a></div>', position: {lat: 32.807070, lng: 130.705726}, label: remains},
-    {title: 'Former Hosokawa Mansion', content: '<div><a href="http://mukaifarmandgarden.org/" target="_blank">Website</a></div>', position: {lat: 32.810311, lng: 130.699712}, label: remains}
-    ];
 // Function to initialize the map within the map div
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -286,40 +267,108 @@ function initMap() {
         }
     ]
     });
-    // Fuji Markers for historic remains
-    let remainsMarker = makeMarker('C08FB3', '<i class="fas fa-landmark"></i>');
-    // Matcha Markers for nature sights
-    let natureMarker = makeMarker('328131', '<i class="fab fa-pagelines"></i>'); 
-    // Ukon Markers for craft workshops
-    let craftMarker = makeMarker('FED300', '<i class="fas fa-paint-brush"></i>');
-    // Blue Markers for modern culture related places
-    let cultureMarker = makeMarker('0086AD', '<i class="far fa-grin-stars"></i>');
-    // Orange Markers for food related locations
-    let foodMarker = makeMarker('EE7800', '<i class="fas fa-utensils"></i>');
+
+    // Location genre
+    let genre;
+
+    // Recommended locations
+    let locations = [
+        {title: 'edo-wonderland', content: '<div><a href="http://mukaifarmandgarden.org/" target="_blank">Website</a></div>', location: {lat: 36.791590, lng: 139.697503}, genre: 'culture'},
+        {title: 'Kumamoto castle', content: '<div><a href="https://www.japan-guide.com/e/e4501.html" target="_blank">japan-guide.com</a></div>', location: {lat: 32.807070, lng: 130.705726}, genre: 'remains'},
+        {title: 'Former Hosokawa Mansion', content: '<div><a href="http://mukaifarmandgarden.org/" target="_blank">Website</a></div>', location: {lat: 32.810311, lng: 130.699712}, genre: 'remains'}
+    ];
+    // Information window
+    let largeInfoWindow = new google.maps.InfoWindow();
+
+    // // Create markers with designs correspond to the genre
+    // let defaultMarker = makeMarker(function(){
+    //     if(location.label === remains){
+    //         // Fuji Markers for historic remains
+    //         this.color = 'C08FB3';
+    //         this.icon = '<i class="fas fa-landmark"></i>'
+    //     }else if(location.label === nature){
+    //         // Matcha Markers for nature sights
+    //         this.color = '328131';
+    //         this.icon = '<i class="fab fa-pagelines"></i>'
+    //     }else if(location.label === workshops){
+    //         // Ukon Markers for craft workshops
+    //         this.color = 'FED300';
+    //         this.icon = '<i class="fas fa-paint-brush"></i>'
+    //     }else if(location.label === culture){
+    //         // Blue Markers for modern culture related places
+    //         this.color = '0086AD';
+    //         this.icon = '<i class="far fa-grin-stars"></i>'
+    //     }else if(location.label === food){
+    //         // Orange Markers for food related locations
+    //         this.color = 'EE7800';
+    //         this.icon = '<i class="fas fa-utensils"></i>'
+    //     }
+    // });
+
+    // function makeMarker(color, icon) {
+    //     let markerColor = location.color;
+    //     let markerIcon = location.icon;
+
+    //     let markerImage = new google.maps.MarkerImage(
+    //         'http://chart.apis.google.com/chart?chchst=d_map_pin_icon&chld=' + markerIcon + '|' + markerColor + '|94A8B0',
+    //         new google.maps.Size(21, 34),
+    //         new google.maps.Point(0, 0),
+    //         new google.maps.Point(10, 34),
+    //         new google.maps.Size(21, 34));
+    //     return markerImage;
+    // }
 
     // Highlighted markers
-    let highlightedMarker = makeMarker('94A8B0', '<i class="fas fa-exclamation"></i>'));
+    //let highlightedMarker = makeMarker('94A8B0', '<i class="fas fa-exclamation"></i>');
 
-    function makeMarker(markerColor) {
-        let markerImage = new google.maps.MarkerImage(
-
-        )
-    }
-
-    // Add the marker with an icon of genre as label
-    let marker = new google.maps.Marker({
-        animation: google.maps.Animation.DROP,
-        position: location,
-        label: genre,
-        map
-    });
-
-    let infoWindow = new google.maps.InfoWindow({
+    for (var i = 0; i < locations.length; i++) {
+        let position = locations[i].location;
+        let title = locations[i].title;
+        let content = locations[i].content;
+        // Make the marker with an icon of the genre
+        let marker = new google.maps.Marker({
+        position,
+        title,
         content,
+        animation: google.maps.Animation.DROP,
+        // label: genre,
+        // icon: defaultMarker,
+        id: i
     });
 
-    // the infowindow opens when the marker is clicked!
+    markers.push(marker);
+
+    // The infowindow opens when the marker is clicked!
     marker.addListener('click', function(){
-        infoWindow.open(map, marker);
+        populateInfoWindow(this, largeInfoWindow);
     });
+}
+    // // Event listerers for mouseover and mouseout
+    // marker.addListener('mouseover', function(){
+    //     this.setIcon(highlightedMarker);
+    // });
+    // marker.addListener('mouseout', function(){
+    //     this.setIcon(defaultMarker);
+    // });
+
+    // To display the markers on the map
+    let bounds = new google.maps.LatLngBounds();
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(map);
+        bounds.extend(markers[i].position);
+    }
+    map.fitBounds(bounds);
+
+    console.log(markers);
+
+    function populateInfoWindow(marker, infowindow) {
+        if (infowindow.marker != marker){
+            infowindow.marker = marker;
+            infowindow.setContent('<div>' + marker.content + '</div>');
+            infowindow.open(map, marker);
+            infowindow.addListener('closeclick', function(){
+                infowindow.marker = null;
+            });
+        }
+    }
 }
