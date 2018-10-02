@@ -38,3 +38,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 [Font Awesome](https://fontawesome.com/)
 
 [Traditional colors of Japan](https://irocore.com/)
+
+[Regions and Prefectures of Japan.svg](https://commons.wikimedia.org/wiki/File:Regions_and_Prefectures_of_Japan.svg)
+
+[Icons8](https://icons8.com/)

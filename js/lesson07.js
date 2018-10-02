@@ -1,4 +1,4 @@
-let map, remains, nature, workshops, culture, food;
+let map;
 let markers = [];
 
 // Function to initialize the map within the map div
@@ -273,7 +273,7 @@ function initMap() {
 
     // Recommended locations
     let locations = [
-        {title: 'edo-wonderland', content: '<div><a href="http://mukaifarmandgarden.org/" target="_blank">Website</a></div>', location: {lat: 36.791590, lng: 139.697503}, genre: 'culture'},
+        {title: 'Edo Wonderland', url: 'http://edowonderland.net/en/', content: '楽しいところです', location: {lat: 36.791590, lng: 139.697503}, genre: 'culture'},
         {title: 'Kumamoto castle', content: '<div><a href="https://www.japan-guide.com/e/e4501.html" target="_blank">japan-guide.com</a></div>', location: {lat: 32.807070, lng: 130.705726}, genre: 'remains'},
         {title: 'Former Hosokawa Mansion', content: '<div><a href="http://mukaifarmandgarden.org/" target="_blank">Website</a></div>', location: {lat: 32.810311, lng: 130.699712}, genre: 'remains'}
     ];
@@ -305,34 +305,36 @@ function initMap() {
     //     }
     // });
 
-    // function makeMarker(color, icon) {
-    //     let markerColor = location.color;
-    //     let markerIcon = location.icon;
+    function makeMarker(color, icon) {
+        let markerColor = location.color;
+        let markerIcon = location.icon;
 
-    //     let markerImage = new google.maps.MarkerImage(
-    //         'http://chart.apis.google.com/chart?chchst=d_map_pin_icon&chld=' + markerIcon + '|' + markerColor + '|94A8B0',
-    //         new google.maps.Size(21, 34),
-    //         new google.maps.Point(0, 0),
-    //         new google.maps.Point(10, 34),
-    //         new google.maps.Size(21, 34));
-    //     return markerImage;
-    // }
+        let markerImage = new google.maps.MarkerImage(
+            'http://chart.apis.google.com/chart?chchst=d_map_pin_icon&chld=' + markerIcon + '|' + markerColor + '|94A8B0',
+            new google.maps.Size(21, 34),
+            new google.maps.Point(0, 0),
+            new google.maps.Point(10, 34),
+            new google.maps.Size(21, 34));
+        return markerImage;
+    }
 
     // Highlighted markers
-    //let highlightedMarker = makeMarker('94A8B0', '<i class="fas fa-exclamation"></i>');
+    let highlightedMarker = makeMarker(markerColor: '94A8B0', makerIcon: '<i class="fas fa-exclamation"></i>');
 
     for (var i = 0; i < locations.length; i++) {
         let position = locations[i].location;
         let title = locations[i].title;
         let content = locations[i].content;
+        let url = locations[i].url;
         // Make the marker with an icon of the genre
         let marker = new google.maps.Marker({
         position,
         title,
         content,
+        url,
         animation: google.maps.Animation.DROP,
-        // label: genre,
-        // icon: defaultMarker,
+        label: genre,
+        icon: defaultMarker,
         id: i
     });
 
@@ -342,14 +344,15 @@ function initMap() {
     marker.addListener('click', function(){
         populateInfoWindow(this, largeInfoWindow);
     });
+
+    // Event listerers for mouseover and mouseout
+    marker.addListener('mouseover', function(){
+        this.setIcon(highlightedMarker);
+    });
+    marker.addListener('mouseout', function(){
+        this.setIcon(defaultMarker);
+    });
 }
-    // // Event listerers for mouseover and mouseout
-    // marker.addListener('mouseover', function(){
-    //     this.setIcon(highlightedMarker);
-    // });
-    // marker.addListener('mouseout', function(){
-    //     this.setIcon(defaultMarker);
-    // });
 
     // To display the markers on the map
     let bounds = new google.maps.LatLngBounds();
@@ -359,12 +362,15 @@ function initMap() {
     }
     map.fitBounds(bounds);
 
-    console.log(markers);
-
     function populateInfoWindow(marker, infowindow) {
         if (infowindow.marker != marker){
             infowindow.marker = marker;
-            infowindow.setContent('<div>' + marker.content + '</div>');
+                if (marker.url == null){
+                    marker.title = marker.title;
+                } else {
+                    marker.title = '<a href="' + marker.url + '" target="_blank">' + marker.title + '</a>';
+                }
+            infowindow.setContent('<div>' + marker.title + '<br>' + marker.content + '</div>');
             infowindow.open(map, marker);
             infowindow.addListener('closeclick', function(){
                 infowindow.marker = null;
