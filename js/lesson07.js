@@ -273,72 +273,71 @@ function initMap() {
 
     // Recommended locations
     let locations = [
+        {title: 'Tsukiji Tamura',  url: 'https://www.tripadvisor.com/Restaurant_Review-g1066444-d1677760-Reviews-Tsukiji_Tamura_Tsukiji-Chuo_Tokyo_Tokyo_Prefecture_Kanto.html', content: 'Highest-end Washoku in Tokyo', location: {lat: 35.668413, lng: 139.771750}, genre: 'food'},
+        {title: 'Bon',  url: 'https://www.tripadvisor.com/Restaurant_Review-g1066461-d1659241-Reviews-Bon-Taito_Tokyo_Tokyo_Prefecture_Kanto.html', content: 'Fine Dining for Vegans', location: {lat: 35.723237, lng: 139.790407}, genre: 'food'},
         {title: 'Edo Wonderland', url: 'http://edowonderland.net/en/', content: '楽しいところです', location: {lat: 36.791590, lng: 139.697503}, genre: 'culture'},
         {title: 'Kumamoto castle', content: '<div><a href="https://www.japan-guide.com/e/e4501.html" target="_blank">japan-guide.com</a></div>', location: {lat: 32.807070, lng: 130.705726}, genre: 'remains'},
-        {title: 'Former Hosokawa Mansion', content: '<div><a href="http://mukaifarmandgarden.org/" target="_blank">Website</a></div>', location: {lat: 32.810311, lng: 130.699712}, genre: 'remains'}
+        {title: 'Former Hosokawa Mansion', content: '<div><a href="http://mukaifarmandgarden.org/" target="_blank">Website</a></div>', location: {lat: 32.810311, lng: 130.699712}, genre: 'remains'},
+        {title: 'Murin an', content: '<div><a href="https://murin-an.jp/" target="_blank">Website</a></div>', location: {lat: 35.012656, lng: 135.787146}, genre: 'remains'}
     ];
     // Information window
     let largeInfoWindow = new google.maps.InfoWindow();
-
-    // // Create markers with designs correspond to the genre
-    // let defaultMarker = makeMarker(function(){
-    //     if(location.label === remains){
-    //         // Fuji Markers for historic remains
-    //         this.color = 'C08FB3';
-    //         this.icon = '<i class="fas fa-landmark"></i>'
-    //     }else if(location.label === nature){
-    //         // Matcha Markers for nature sights
-    //         this.color = '328131';
-    //         this.icon = '<i class="fab fa-pagelines"></i>'
-    //     }else if(location.label === workshops){
-    //         // Ukon Markers for craft workshops
-    //         this.color = 'FED300';
-    //         this.icon = '<i class="fas fa-paint-brush"></i>'
-    //     }else if(location.label === culture){
-    //         // Blue Markers for modern culture related places
-    //         this.color = '0086AD';
-    //         this.icon = '<i class="far fa-grin-stars"></i>'
-    //     }else if(location.label === food){
-    //         // Orange Markers for food related locations
-    //         this.color = 'EE7800';
-    //         this.icon = '<i class="fas fa-utensils"></i>'
-    //     }
-    // });
-
-    function makeMarker(color, icon) {
-        let markerColor = location.color;
-        let markerIcon = location.icon;
-
-        let markerImage = new google.maps.MarkerImage(
-            'http://chart.apis.google.com/chart?chchst=d_map_pin_icon&chld=' + markerIcon + '|' + markerColor + '|94A8B0',
-            new google.maps.Size(21, 34),
-            new google.maps.Point(0, 0),
-            new google.maps.Point(10, 34),
-            new google.maps.Size(21, 34));
-        return markerImage;
-    }
-
-    // Highlighted markers
-    let highlightedMarker = makeMarker(markerColor: '94A8B0', makerIcon: '<i class="fas fa-exclamation"></i>');
 
     for (var i = 0; i < locations.length; i++) {
         let position = locations[i].location;
         let title = locations[i].title;
         let content = locations[i].content;
         let url = locations[i].url;
-        // Make the marker with an icon of the genre
-        let marker = new google.maps.Marker({
-        position,
-        title,
-        content,
-        url,
-        animation: google.maps.Animation.DROP,
-        label: genre,
-        icon: defaultMarker,
-        id: i
-    });
 
-    markers.push(marker);
+        // Create markers with designs correspond to the genre
+        let defaultMarker = function makeMarker(map, locations){
+            let markerColor;
+            let markerIcon;
+
+            if(location.label === remains){
+                // Fuji Markers for historic remains
+                markerColor = 'C08FB3';
+                markerIcon = '<i class="fas fa-landmark"></i>'
+            }else if(location.label === nature){
+                // Matcha Markers for nature sights
+                markerColor = '328131';
+                markerIcon = '<i class="fab fa-pagelines"></i>'
+            }else if(location.label === workshops){
+                // Ukon Markers for craft workshops
+                markerColor = 'FED300';
+                markerIcon = '<i class="fas fa-paint-brush"></i>'
+            }else if(location.label === culture){
+                // Blue Markers for modern culture related places
+                markerColor = '0086AD';
+                markerIcon = '<i class="far fa-grin-stars"></i>'
+            }else if(location.label === food){
+                // Orange Markers for food related locations
+                markerColor = 'EE7800';
+                markerIcon = '<i class="fas fa-utensils"></i>'
+            }
+
+            // Make the marker with an icon of the genre
+            let marker = new google.maps.Marker({
+                position,
+                title,
+                content,
+                url,
+                animation: google.maps.Animation.DROP,
+                label: genre,
+                icon: defaultMarker,
+                id: i
+            });
+
+            return marker;
+
+            markers.push(marker);
+        };
+
+        // Highlighted markers
+        // let highlightedMarker = makeMarker(function(){
+        //     markerColor = '94A8B0';
+        //     makerIcon = '<i class="fas fa-exclamation"></i>';
+        // });
 
     // The infowindow opens when the marker is clicked!
     marker.addListener('click', function(){
